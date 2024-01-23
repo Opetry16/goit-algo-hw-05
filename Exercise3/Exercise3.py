@@ -1,10 +1,15 @@
+import os
+import chardet
 import timeit
 
-def read_file(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
+def read_file(file_path, encoding='utf-8'):
+    with open(file_path, 'rb') as file:
+        result = chardet.detect(file.read())
+    file_encoding = result['encoding']
+    with open(file_path, 'r', encoding=file_encoding) as file:
         return file.read()
 
-def boyer_moore_search(text, pattern): # Боєра-Мура
+def boyer_moore_search(text, pattern): # Алгоритм Боєра-Мура
     m, n = len(pattern), len(text)
     if m == 0:
         return 0
@@ -26,7 +31,7 @@ def boyer_moore_search(text, pattern): # Боєра-Мура
 
     return -1
 
-def kmp_search(text, pattern):  # Кнута-Морріса-Пратта
+def kmp_search(text, pattern):  # Алгоритм Кнута-Морріса-Пратта
     m, n = len(pattern), len(text)
     if m == 0:
         return 0
@@ -70,22 +75,21 @@ def compute_lps_array(pattern, m, lps):
                 lps[i] = 0
                 i += 1
 
-def rabin_karp_search(text, pattern): # Рабіна-Карпа
+def rabin_karp_search(text, pattern): # Алгоритм Рабіна-Карпа
     m, n = len(pattern), len(text)
-    if m == 0:
-        return 0
+    if m == 0 or m > n:
+        return -1
 
     prime = 101  
 
     pattern_hash = calculate_hash(pattern, m)
     text_hash = calculate_hash(text[:m], m)
 
-    for i in range(n - m + 1):
+    for i in range(n - m):  # Оновлено тут
         if pattern_hash == text_hash and text[i:i + m] == pattern:
             return i
 
-        if i < n - m:
-            text_hash = recalculate_hash(text, i + 1, i + m + 1, text_hash, m, prime)
+        text_hash = recalculate_hash(text, i, i + m, text_hash, m, prime)
 
     return -1
 
