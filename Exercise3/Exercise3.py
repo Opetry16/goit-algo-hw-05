@@ -9,7 +9,7 @@ def read_file(file_path, encoding='utf-8'):
     with open(file_path, 'r', encoding=file_encoding) as file:
         return file.read()
 
-def boyer_moore_search(text, pattern): # Алгоритм Боєра-Мура
+def boyer_moore_search(text, pattern): 
     m, n = len(pattern), len(text)
     if m == 0:
         return 0
@@ -31,7 +31,7 @@ def boyer_moore_search(text, pattern): # Алгоритм Боєра-Мура
 
     return -1
 
-def kmp_search(text, pattern):  # Алгоритм Кнута-Морріса-Пратта
+def kmp_search(text, pattern):  
     m, n = len(pattern), len(text)
     if m == 0:
         return 0
@@ -75,7 +75,7 @@ def compute_lps_array(pattern, m, lps):
                 lps[i] = 0
                 i += 1
 
-def rabin_karp_search(text, pattern): # Алгоритм Рабіна-Карпа
+def rabin_karp_search(text, pattern): 
     m, n = len(pattern), len(text)
     if m == 0 or m > n:
         return -1
@@ -85,7 +85,7 @@ def rabin_karp_search(text, pattern): # Алгоритм Рабіна-Карпа
     pattern_hash = calculate_hash(pattern, m)
     text_hash = calculate_hash(text[:m], m)
 
-    for i in range(n - m):  # Оновлено тут
+    for i in range(n - m):  
         if pattern_hash == text_hash and text[i:i + m] == pattern:
             return i
 
@@ -112,25 +112,31 @@ def measure_time(search_func, text, pattern):
 article1 = read_file(r'C:\Users\Олег\Desktop\GOIT\Projects\Repositories\Tier1.Basic Alg.-Data Str\goit-algo-hw-05\goit-algo-hw-05\Exercise3\article1.txt')
 article2 = read_file(r'C:\Users\Олег\Desktop\GOIT\Projects\Repositories\Tier1.Basic Alg.-Data Str\goit-algo-hw-05\goit-algo-hw-05\Exercise3\article2.txt')
 
-# Задаємо підрядки для пошуку (існуючий та вигаданий)
-existing_pattern = 'your_existing_pattern_here'
-fictional_pattern = 'your_fictional_pattern_here'
+# Задаємо реальний підрядок для пошуку та вигаданий
+existing_pattern = "public static int jumpSearch(int[] integers, int elementToSearch)" 
+fictional_pattern = 'Через 20 років на Марсі буде життя'
 
-# Вимірюємо час для кожного алгоритму та тексту
-boyer_moore_time_article1 = measure_time(boyer_moore_search, article1, existing_pattern)
-kmp_time_article1 = measure_time(kmp_search, article1, existing_pattern)
-rabin_karp_time_article1 = measure_time(rabin_karp_search, article1, existing_pattern)
+# Перевірка чи є вигаданий та реальний підрядки в артикулах
+if (boyer_moore_search(article1, fictional_pattern) != -1 or 
+        boyer_moore_search(article2, fictional_pattern) != -1 or
+        boyer_moore_search(article1, existing_pattern) == -1 or
+        boyer_moore_search(article2, existing_pattern) == -1):
+    print("Помилка: Вигаданий або реальний підрядок не відповідає очікуваному результату!")
+else:
+    # Вимірюємо час для кожного алгоритму та тексту
+    boyer_moore_time_article1 = measure_time(boyer_moore_search, article1, existing_pattern)
+    kmp_time_article1 = measure_time(kmp_search, article1, existing_pattern)
+    rabin_karp_time_article1 = measure_time(rabin_karp_search, article1, existing_pattern)
 
-boyer_moore_time_article2 = measure_time(boyer_moore_search, article2, existing_pattern)
-kmp_time_article2 = measure_time(kmp_search, article2, existing_pattern)
-rabin_karp_time_article2 = measure_time(rabin_karp_search, article2, existing_pattern)
+    boyer_moore_time_article2 = measure_time(boyer_moore_search, article2, existing_pattern)
+    kmp_time_article2 = measure_time(kmp_search, article2, existing_pattern)
+    rabin_karp_time_article2 = measure_time(rabin_karp_search, article2, existing_pattern)
 
-# Виводимо результати для існуючого підрядка
-print("Час для алгоритму Боєра-Мура (стаття 1):", boyer_moore_time_article1)
-print("Час для алгоритму Кнута-Морріса-Пратта (стаття 1):", kmp_time_article1)
-print("Час для алгоритму Рабіна-Карпа (стаття 1):", rabin_karp_time_article1)
+    # Виводимо результати для реального підрядка
+    print("Час для алгоритму Боєра-Мура (стаття 1):", boyer_moore_time_article1)
+    print("Час для алгоритму Кнута-Морріса-Пратта (стаття 1):", kmp_time_article1)
+    print("Час для алгоритму Рабіна-Карпа (стаття 1):", rabin_karp_time_article1)
 
-print("Час для алгоритму Боєра-Мура (стаття 2):", boyer_moore_time_article2)
-print("Час для алгоритму Кнута-Морріса-Пратта (стаття 2):", kmp_time_article2)
-print("Час для алгоритму Рабіна-Карпа (стаття 2):", rabin_karp_time_article2)
-
+    print("Час для алгоритму Боєра-Мура (стаття 2):", boyer_moore_time_article2)
+    print("Час для алгоритму Кнута-Морріса-Пратта (стаття 2):", kmp_time_article2)
+    print("Час для алгоритму Рабіна-Карпа (стаття 2):", rabin_karp_time_article2)
